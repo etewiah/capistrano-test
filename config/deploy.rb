@@ -37,12 +37,18 @@ set :deploy_via, :remote_cache
 set :use_sudo, false
 
 set :scm, "git"
-set :repository, git@github.com:etewiah/capistrano-test.git
+set :repository, "git@github.com:etewiah/capistrano-test.git"
 # "git@github.com:eifion/#{application}.git"
 set :branch, "master"
 
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
+ssh_options[:user] = "deployer"
+ssh_options[:keys] =  "#{Dir[(File.expand_path('~') rescue '/root') + '/.ec2/*whereuat'].first}"
+
+
+# ["#{ENV['HOME']}/.ssh/your-ec2-key.pem"] # make sure you also have the publickey
+
 
 after "deploy", "deploy:cleanup" # keep only the last 5 releases
 
