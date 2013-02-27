@@ -31,7 +31,7 @@ require "bundler/capistrano"
 server "54.228.223.255", :web, :app, :db, primary: true
 
 set :application, "blog"
-set :user, "deployer"
+set :user, "root"
 set :deploy_to, "/home/#{user}/apps/#{application}"
 set :deploy_via, :remote_cache
 set :use_sudo, false
@@ -41,9 +41,22 @@ set :repository, "git@github.com:etewiah/capistrano-test.git"
 # "git@github.com:eifion/#{application}.git"
 set :branch, "master"
 
+
+
+set :default_environment, {
+  'PATH' => "/usr/local/rubies/1.9.3-p385/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+ # ,
+  # 'RUBY_VERSION' => 'ruby 1.8.7',
+  # 'GEM_HOME'     => '/path/to/.rvm/gems/ree-1.8.7-2010.01',
+  # 'GEM_PATH'     => '/path/to/.rvm/gems/ree-1.8.7-2010.01',
+  # 'BUNDLE_PATH'  => '/path/to/.rvm/gems/ree-1.8.7-2010.01'  # If you are using bundler.
+}
+
+
+
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
-ssh_options[:user] = "deployer"
+ssh_options[:user] = "root"
 ssh_options[:keys] =  "#{Dir[(File.expand_path('~') rescue '/root') + '/.ec2/*whereuat'].first}"
 
 
@@ -64,7 +77,7 @@ namespace :deploy do
     sudo "ln -nfs #{current_path}/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
     sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
     run "mkdir -p #{shared_path}/config"
-    put File.read("config/database.example.yml"), "#{shared_path}/config/database.yml"
+    put File.read("config/database.server.yml"), "#{shared_path}/config/database.yml"
     puts "Now edit the config files in #{shared_path}."
   end
   after "deploy:setup", "deploy:setup_config"
