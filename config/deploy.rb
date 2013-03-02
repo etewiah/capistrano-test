@@ -31,7 +31,7 @@ require "bundler/capistrano"
 server "54.228.223.255", :web, :app, :db, primary: true
 
 set :application, "blog"
-set :user, "root"
+set :user, "ubuntu"
 set :deploy_to, "/home/#{user}/apps/#{application}"
 set :deploy_via, :remote_cache
 set :use_sudo, false
@@ -56,7 +56,7 @@ set :default_environment, {
 
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
-ssh_options[:user] = "root"
+ssh_options[:user] = "ubuntu"
 ssh_options[:keys] =  "#{Dir[(File.expand_path('~') rescue '/root') + '/.ec2/*whereuat'].first}"
 
 
