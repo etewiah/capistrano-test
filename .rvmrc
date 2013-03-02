@@ -1,0 +1,2 @@
+#rvm use ruby-1.9.3@rails3-mongoid-omniauth-moodlefloat --create
+rvm use ruby-1.9.3-p385@ec2_rubber  --create
